@@ -15,31 +15,44 @@ Please note that issues are disabled for this repository. Please feel free to op
 Documentation for the Marathon UI (work in progress) can be found at
 https://mesosphere.github.io/marathon/docs/marathon-ui.html.
 
+#### Prequisites
+
+Please make sure you've installed and properly configured the following software:
+
+* [Docker 1.9](https://www.docker.com/)
+* [Node 5](https://nodejs.org/en/blog/release/v5.0.0/) including [NPM](https://npmjs.org/)
+
 #### Setup
 
-1. Install Mesos and Marathon (follow the [tutorial here](https://mesosphere.github.io/marathon/docs/))
-2. Setup a CORS proxy on your machine to proxy the UI requests to your running Marathon instance (e.g. via [Corsproxy](https://www.npmjs.com/package/corsproxy))
-3. Install [Node 5](https://nodejs.org/en/blog/release/v5.0.0/) and [NPM](https://npmjs.org/)
-
-4. Install dev dependencies
+##### 1. Install all dependencies
 
         npm install
         npm install -g gulp
 
-5. Override development configuration
+##### 2. Configure your hosts
 
-    1. Copy `src/js/config/config.template.js` to `src/js/config/config.dev.js`
-    2. Override variables in `config.dev.js` to reflect your local development configuration
+If you're not using something like [dnsdock](https://github.com/tonistiigi/dnsdock) or [dinghy](https://github.com/codekitchen/dinghy) (OS X) for easy container discovery/access, please configure your hosts as follows:
 
-6. Run development environment
+      mesos-master.docker 192.168.99.100
+      mesos-slave.docker  192.168.99.100
+      marathon.docker     192.168.99.100
 
-        npm run serve
+*Use `$ docker-machine ip $DOCKER_MACHINE_NAME` to get the current docker machine ip and add those lines to your `etc/hosts` configuration.*
 
-  or
 
-        npm run livereload
+##### 4. Start your environment
 
-  for a `browsersync` live-reload server.
+The following command will download, configure and start a basic Zookeeper, Mesos and Marathon setup for you. It will also serve the Marathon UI.
+
+       docker-compose up
+
+##### 5. Build your very own Marathon UI
+
+Running the following command will build the Marathon UI and watch for file changes to rerun the build.
+
+       npm run serve
+
+Open http://marathon.docker:8080 to enjoy your fresh build.
 
 #### Contributing to this project
 
